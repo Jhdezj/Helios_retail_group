@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Lakehouse",
+    "displayName": "Silver_Lakehouse",
+    "description": "STANDARDIZED and CLEANED data (column standardization, null handling, duplicates handling, etc.)\n"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "3ad4897d-1c6e-a678-43f6-4e4bb32334ad"
+  }
+}

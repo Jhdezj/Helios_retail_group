@@ -79,9 +79,51 @@ display(spark_df)
 
 # Save as delta table in the Bronze Lakehouse
 # Note: in order to use the relative path, we need to set the Bronze Lakehouse as the Default lakehouse for this notebook
-spark_df.write.format("delta").mode("overwrite").save("Tables/dbo/Stores")
-# same as spark_df.write.format("delta").mode("overwrite").saveAsTable("dbo.Stores")
+# Not  recommended: spark_df.write.format("delta").mode("overwrite").save("Tables/dbo/Stores")
+spark_df.write \
+    .format("delta") \
+    .mode("overwrite") \
+    .option("overwriteSchema", "true") \
+    .saveAsTable("dbo.Stores")
 
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+display(spark_df)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+spark_df.show()
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# Read the table into a Spark DataFrame
+spark_df = spark.table("dbo.Stores")
+
+# Preview
+spark_df.show()
 
 
 # METADATA ********************

@@ -25,7 +25,7 @@
 
 # MARKDOWN ********************
 
-# # Stores Raw to Bronze  
+# # Sales Raw to Bronze  
 # Notebook that takes the csv files from the Raw Lakehouse and converts them as they are and puts them into the Bronze Lakehouse (no cleaning nor standardization processing!)
 
 # CELL ********************
@@ -39,71 +39,14 @@ import pandas as pd
 # META   "language_group": "synapse_pyspark"
 # META }
 
-# CELL ********************
+# MARKDOWN ********************
 
-# Load data into pandas DataFrame from "/lakehouse/default/Files/csv/store_01_2026-02-01.csv"
-df = pd.read_csv("/lakehouse/default/Files/csv/store_01_2026-02-01.csv")
-display(df)
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
+# ## Read data (EXTRACT)
 
 # CELL ********************
 
-spark_df = spark.createDataFrame(df)
-display(spark_df)
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
-# CELL ********************
-
-# Assuming 'spark' session is available
-# Crea la tabla DIRECTAMENTE en el DEFAULT lakehouse
-spark_df.write.format("delta").mode("overwrite").saveAsTable("table1")
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
-# CELL ********************
-
-# Assuming 'spark' session is available
-# Crea la tabla en cualquier otro lakehouse especificando la ruta:
-lakehouse_name = "Bronze_Lakehouse"
-schema = "dbo"
-workspace_name = "Helios_Retail_Group"
-table_name = "sales01"
-
-# Si workspace_name NO tiene espacios, usar esto:
-spark_df.write.format("delta").mode("append")\
-    .save(f"abfss://{workspace_name}@onelake.dfs.fabric.microsoft.com/{lakehouse_name}.Lakehouse/Tables/{schema}/{table_name}")
-
-# Si workspace_name SÍ tiene espacios, debo usar los IDs (es otra ruta)
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
-# CELL ********************
-
-# Load data into pandas DataFrame from "/lakehouse/default/Files/csv/store_01_2026-02-01.csv"
-df2 = pd.read_csv("/lakehouse/default/Files/csv/store_02_2026-02-01.csv")
-display(df2)
+ 
+from notebookutils import mssparkutils
 
 
 # METADATA ********************
@@ -113,8 +56,102 @@ display(df2)
 # META   "language_group": "synapse_pyspark"
 # META }
 
+# MARKDOWN ********************
+
+# ### Read files from the raw lakehouse 
+
 # CELL ********************
 
+raw_files = mssparkutils.fs.ls("Files/csv/")
+raw_file_names = [f.name for f in raw_files if f.name.endswith(".csv")]
+
+print(raw_file_names)
+
+
+bronze_path = "abfss://Helios_Retail_Group@onelake.dfs.fabric.microsoft.com/Bronze_Lakehouse.Lakehouse/Files/Processed"
+
+bronze_files = mssparkutils.fs.ls(bronze_path)
+bronze_file_names = [f.name for f in bronze_files if f.name.endswith(".csv")]
+
+print(bronze_file_names)
+
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# MARKDOWN ********************
+
+# ### Obtain unprocessed files
+
+# CELL ********************
+
+raw_set = set(raw_file_names)
+bronze_set = set(bronze_file_names)
+
+unprocessed_files = raw_set - bronze_set
+
+print("Missing in Bronze:", unprocessed_files)
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# MARKDOWN ********************
+
+# ## Transform and Load  
+# Process the files that are missing in the Bronze lakehouse into a sales table
+
+# CELL ********************
+
+import pandas as pd
+import os
+
+base_path = "/lakehouse/default/Files/csv/"
+
+#file_names = [f for f in os.listdir(base_path) if f.endswith(".csv")]
+
+dfs = []
+for file in unprocessed_files:
+    full_path = os.path.join(base_path, file)
+    df = pd.read_csv(full_path)
+    dfs.append(df)
+
+if len(dfs)>0:
+    Sales = pd.concat(dfs, ignore_index=True)
+    spark_df = spark.createDataFrame(Sales)
+    display(spark_df)
+
+    # WRITE the spark dataframe (append)
+    # Assuming 'spark' session is available
+    # Crea la tabla en cualquier otro lakehouse especificando la ruta:
+    lakehouse_name = "Bronze_Lakehouse"
+    schema = "dbo"
+    workspace_name = "Helios_Retail_Group"
+    table_name = "Sales"
+
+    # Si workspace_name NO tiene espacios, usar esto:
+    spark_df.write.format("delta").mode("append")\
+        .save(f"abfss://{workspace_name}@onelake.dfs.fabric.microsoft.com/{lakehouse_name}.Lakehouse/Tables/{schema}/{table_name}")
+
+    # Si workspace_name SÍ tiene espacios, debo usar los IDs (es otra ruta)
+
+    # MOVE the files to processed
+    # Technical requirement: once the files have been processed, 
+    # move them to the Bronze layer (Bronze_Lakehouse)
+    for file in unprocessed_files:
+        source_path = "file:" + os.path.join(base_path, file)
+        destination_path = os.path.join(bronze_path, file)
+        print(f"Moving {file}...")
+        mssparkutils.fs.mv(source_path, destination_path)
 
 # METADATA ********************
 

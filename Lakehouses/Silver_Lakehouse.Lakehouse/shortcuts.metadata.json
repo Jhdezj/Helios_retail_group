@@ -1,24 +1,11 @@
 [
   {
-    "name": "Stores",
+    "name": "Dates",
     "path": "/Tables/dbo",
     "target": {
       "type": "OneLake",
       "oneLake": {
-        "path": "Tables/dbo/Stores",
-        "itemId": "c7bd13f4-8bd9-a393-4a9f-67d3cb724bdd",
-        "workspaceId": "00000000-0000-0000-0000-000000000000",
-        "artifactType": "Lakehouse"
-      }
-    }
-  },
-  {
-    "name": "Products",
-    "path": "/Tables/dbo",
-    "target": {
-      "type": "OneLake",
-      "oneLake": {
-        "path": "Tables/dbo/Products",
+        "path": "Tables/dbo/Dates",
         "itemId": "c7bd13f4-8bd9-a393-4a9f-67d3cb724bdd",
         "workspaceId": "00000000-0000-0000-0000-000000000000",
         "artifactType": "Lakehouse"

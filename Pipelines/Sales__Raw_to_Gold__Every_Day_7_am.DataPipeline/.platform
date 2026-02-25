@@ -1,11 +1,11 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
   "metadata": {
-    "type": "Notebook",
-    "displayName": "Dim_Product__Silver_to_Gold"
+    "type": "DataPipeline",
+    "displayName": "Sales__Raw_to_Gold__Every_Day_7_am"
   },
   "config": {
     "version": "2.0",
-    "logicalId": "5e61e4dd-b289-8e79-4e95-e23d0475d648"
+    "logicalId": "1d2acaf9-0f53-a250-477b-f7751dd1fc81"
   }
 }

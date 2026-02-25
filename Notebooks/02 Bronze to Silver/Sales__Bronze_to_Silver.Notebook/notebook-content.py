@@ -26,7 +26,7 @@
 # MARKDOWN ********************
 
 # # Sales Bronze to Silver  
-# Notebook that takes the Stores tables from the Bronze Lakehouse and takes them to Silver carrying out a standardization and cleaning process.
+# Notebook that takes the Sales tables from the Bronze Lakehouse and takes them to Silver carrying out a standardization and cleaning process.
 
 # MARKDOWN ********************
 
@@ -351,6 +351,79 @@ sales_df["category"] = sales_df["category"].fillna("Unknown")
 
 # MARKDOWN ********************
 
+# ### Product_id standardization
+# Transform the product_id column from the sales dataframe to match the format of the id column from the products table 
+
+# CELL ********************
+
+sales_df.sample()
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+sales_df["product_id"]=sales_df["product_id"].str.replace("P","").astype("int")
+sales_df.sample()
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# MARKDOWN ********************
+
+
+# MARKDOWN ********************
+
+# ### Timestamp and Date key column 
+# Convert the timestamp column to datime data type and add date_key column to the sales dataframe
+
+# CELL ********************
+
+import pandas as pd
+# timestam column to datime data type
+sales_df['transaction_timestamp'] = pd.to_datetime(sales_df['transaction_timestamp'])
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# add date_key column
+sales_df['date_key'] = sales_df['transaction_timestamp'].dt.strftime('%Y%m%d')
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+sales_df.sample(3)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# MARKDOWN ********************
+
 # ### Custom business rules 
 # E.g., quantity and unit_price must be positive,etc. 
 
@@ -393,7 +466,7 @@ display(df_valid.sample(3))
 # MARKDOWN ********************
 
 # ## Save/Write to a table (LOAD)  
-# We will use the *append* mode because we need to keep the data from other stores and other dates. 
+# We will use the *overwrite* mode because we need to create a clean table. 
 
 # CELL ********************
 
@@ -412,8 +485,8 @@ display(spark_df)
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC --delete from Silver_Lakehouse.dbo.sales01_silver
-# MAGIC drop table Silver_Lakehouse.dbo.sales01_silver
+# MAGIC --delete from Silver_Lakehouse.dbo.Sales
+# MAGIC drop table Silver_Lakehouse.dbo.Sales
 
 # METADATA ********************
 
@@ -426,9 +499,9 @@ display(spark_df)
 
 # CELL ********************
 
-# Save as delta table in the Bronze Lakehouse
-# Note: in order to use the relative path, we need to set the Bronze Lakehouse as the Default lakehouse for this notebook
-spark_df.write.format("delta").mode("append").save(
+# Save as delta table in the Silver Lakehouse
+# Note: in order to use the relative path, we need to set the Silver Lakehouse as the Default lakehouse for this notebook
+spark_df.write.format("delta").mode("overwrite").save(
     "abfss://Helios_Retail_Group@onelake.dfs.fabric.microsoft.com/"
     "Silver_Lakehouse.Lakehouse/Tables/dbo/Sales"
     )

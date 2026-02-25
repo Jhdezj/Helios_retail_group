@@ -32,7 +32,6 @@
 
 import pandas as pd
 
-
 # METADATA ********************
 
 # META {
@@ -46,7 +45,6 @@ import pandas as pd
 df = pd.read_excel("abfss://Helios_Retail_Group@onelake.dfs.fabric.microsoft.com/Raw_Lakehouse.Lakehouse/Files/xlsx/Helios Products Catalog.xlsx")
 
 display(df)
-
 
 # METADATA ********************
 

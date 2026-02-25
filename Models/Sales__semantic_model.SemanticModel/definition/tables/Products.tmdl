@@ -1,0 +1,69 @@
+table Products
+	lineageTag: 95099877-5e31-439f-8a40-a4aef9317ec3
+	sourceLineageTag: [dbo].[Products]
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 8611d749-0015-4c55-b5d3-513d1bc4fc52
+		sourceLineageTag: id
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: 4024f9e5-0f22-497c-bc71-c66e7cf908a2
+		sourceLineageTag: name
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column category
+		dataType: string
+		lineageTag: 6a37c12d-2e9b-425a-8f30-96221fe0dddb
+		sourceLineageTag: category
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	column brand
+		dataType: string
+		lineageTag: fb04cd92-540e-4147-85fe-2c3ee15e0034
+		sourceLineageTag: brand
+		summarizeBy: none
+		sourceColumn: brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column unit_price
+		dataType: double
+		lineageTag: 4eafcca0-14f4-4d69-8436-66f79305bf7f
+		sourceLineageTag: unit_price
+		summarizeBy: none
+		sourceColumn: unit_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column launch_year
+		dataType: int64
+		formatString: 0
+		lineageTag: c21f17c0-cdb0-4752-82d1-644e62c6078d
+		sourceLineageTag: launch_year
+		summarizeBy: none
+		sourceColumn: launch_year
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Products = entity
+		mode: directLake
+		source
+			entityName: Products
+			schemaName: dbo
+			expressionSource: 'DirectLake - Gold_Lakehouse'
+

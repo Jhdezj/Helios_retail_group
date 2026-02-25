@@ -1,0 +1,76 @@
+table Stores
+	lineageTag: 13108d73-2048-4599-a5d2-ad014a5589df
+	sourceLineageTag: [dbo].[Stores]
+
+	column location
+		dataType: string
+		lineageTag: acac0741-8f17-4e87-b974-8a0d5c4d88ae
+		sourceLineageTag: location
+		summarizeBy: none
+		sourceColumn: location
+
+		annotation SummarizationSetBy = Automatic
+
+	column opening_date
+		dataType: string
+		lineageTag: b112a61d-87dd-4edc-9928-d17990a2311b
+		sourceLineageTag: opening_date
+		summarizeBy: none
+		sourceColumn: opening_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column floor_area
+		dataType: int64
+		formatString: 0
+		lineageTag: 748827d7-f9c2-4da0-b23e-06f10df7f4af
+		sourceLineageTag: floor_area
+		summarizeBy: none
+		sourceColumn: floor_area
+
+		annotation SummarizationSetBy = Automatic
+
+	column regional_manager
+		dataType: string
+		lineageTag: 2f65d858-b0b8-4953-8fa0-12878a11b5f3
+		sourceLineageTag: regional_manager
+		summarizeBy: none
+		sourceColumn: regional_manager
+
+		annotation SummarizationSetBy = Automatic
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: e18ded7f-5a39-4280-9ce3-c400a455d2de
+		sourceLineageTag: id
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: f694e237-62d6-4683-8141-a49de487e600
+		sourceLineageTag: name
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column type
+		dataType: string
+		lineageTag: dfff6304-305e-4bcb-aaea-5055aef59e89
+		sourceLineageTag: type
+		summarizeBy: none
+		sourceColumn: type
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Stores = entity
+		mode: directLake
+		source
+			entityName: Stores
+			schemaName: dbo
+			expressionSource: 'DirectLake - Gold_Lakehouse'
+

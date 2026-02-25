@@ -28,6 +28,17 @@
 # # Sales Bronze to Silver  
 # Notebook that takes the Sales tables from the Bronze Lakehouse and takes them to Silver carrying out a standardization and cleaning process.
 
+# CELL ********************
+
+import pandas as pd
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
 # MARKDOWN ********************
 
 # ## Read data (EXTRACT)
@@ -37,7 +48,7 @@
 # Different ways to read a table:
 
 # a) Read the table directly using pyspark and referencing the corresponding Lakehouse
-sales_df = spark.read.table("Bronze_Lakehouse.dbo.sales01")
+sales_df = spark.read.table("Bronze_Lakehouse.dbo.Sales")
 
 # b) Read using pyspark and the absolut path
 #sales_df =spark.read.format('delta').load('abfss://Helios_Retail_Group@onelake.dfs.fabric.microsoft.com/Bronze_Lakehouse.Lakehouse/Tables/dbo/sales01')
@@ -136,6 +147,23 @@ sales_df.dtypes
 
 # CELL ********************
 
+
+# Convert transaction_timestamp to datetime
+sales_df["transaction_timestamp"] = pd.to_datetime(
+    sales_df["transaction_timestamp"],
+    format="%m/%d/%Y %H:%M",  # match your string format
+    errors="coerce"           # converts invalid parsing to NaT instead of failing
+)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 # Option B: use pandas
 
 # Data type validation
@@ -224,7 +252,7 @@ sales_df.duplicated().any()
 
 #See duplicate rows
 
-sales_df[sales_df.duplicated()]
+sales_df[sales_df.duplicated()].sample(5)
 
 # METADATA ********************
 
@@ -402,7 +430,7 @@ sales_df['transaction_timestamp'] = pd.to_datetime(sales_df['transaction_timesta
 # CELL ********************
 
 # add date_key column
-sales_df['date_key'] = sales_df['transaction_timestamp'].dt.strftime('%Y%m%d')
+sales_df['date_key'] = sales_df['transaction_timestamp'].dt.strftime('%Y%m%d').astype('int64')
 
 # METADATA ********************
 

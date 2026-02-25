@@ -34,6 +34,7 @@
 # CELL ********************
 
 import pandas as pd
+import numpy as np
 
 # METADATA ********************
 
@@ -44,50 +45,70 @@ import pandas as pd
 
 # CELL ********************
 
-# Calendar table 
 
 # Create date range
 start_date = "2026-01-01"
 end_date = "2030-12-31"
-dates = pd.date_range(start=start_date, end=end_date, freq='D')
-
+dates = pd.date_range(start=start_date, end=end_date, freq="D")
 
 # Build dataframe
-df = pd.DataFrame({'full_date': dates})
+df = pd.DataFrame({"full_date": dates})
 
-# Date key in format YYYYMMDD (integer)
-df['date_key'] = df['full_date'].dt.strftime('%Y%m%d').astype(int)
+# Ensure full_date is date only (no time component)
+df["full_date"] = pd.to_datetime(df["full_date"]).dt.date
 
-# Date attributes
-df['year'] = df['full_date'].dt.year
-df['quarter'] = df['full_date'].dt.quarter
-df['month'] = df['full_date'].dt.month
-df['day'] = df['full_date'].dt.day
+# Date key in format YYYYMMDD (int64 for warehouse compatibility)
+df["date_key"] = (
+    pd.to_datetime(df["full_date"])
+    .dt.strftime("%Y%m%d")
+    .astype("int64")
+)
 
-# Monday=0, Sunday=6 (standard pandas behavior)
-df['day_of_week'] = df['full_date'].dt.weekday
+# Date attributes with controlled dtypes
+df["year"] = pd.to_datetime(df["full_date"]).dt.year.astype("int16")
+df["quarter"] = pd.to_datetime(df["full_date"]).dt.quarter.astype("int8")
+df["month"] = pd.to_datetime(df["full_date"]).dt.month.astype("int8")
+df["day"] = pd.to_datetime(df["full_date"]).dt.day.astype("int8")
 
-df['weekday_name'] = df['full_date'].dt.day_name()
+# Monday=0, Sunday=6
+df["day_of_week"] = pd.to_datetime(df["full_date"]).dt.weekday.astype("int8")
 
-# Weekend flag (Saturday=5, Sunday=6)
-df['is_weekend'] = df['day_of_week'].isin([5, 6]).astype(int)
+df["weekday_name"] = (
+    pd.to_datetime(df["full_date"])
+    .dt.day_name()
+    .astype("string")
+)
 
-# Reorder columns to match your Dim_Date structure
+# Weekend flag (0/1 as tiny integer)
+df["is_weekend"] = df["day_of_week"].isin([5, 6]).astype("int8")
+
+# Reorder columns
 df = df[
     [
-        'date_key',
-        'full_date',
-        'year',
-        'quarter',
-        'month',
-        'day',
-        'day_of_week',
-        'weekday_name',
-        'is_weekend'
+        "date_key",
+        "full_date",
+        "year",
+        "quarter",
+        "month",
+        "day",
+        "day_of_week",
+        "weekday_name",
+        "is_weekend",
     ]
 ]
-df
 
+df.dtypes
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+df
 
 # METADATA ********************
 

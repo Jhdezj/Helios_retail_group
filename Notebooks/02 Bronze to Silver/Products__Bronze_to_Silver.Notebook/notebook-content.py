@@ -393,7 +393,7 @@ display(spark_df)
 
 # Save as delta table in the Bronze Lakehouse
 # Note: in order to use the relative path, we need to set the Bronze Lakehouse as the Default lakehouse for this notebook
-spark_df.write.format("delta").mode("append").save(
+spark_df.write.format("delta").mode("overwrite").save(
     "abfss://Helios_Retail_Group@onelake.dfs.fabric.microsoft.com/"
     "Silver_Lakehouse.Lakehouse/Tables/dbo/Products"
     )

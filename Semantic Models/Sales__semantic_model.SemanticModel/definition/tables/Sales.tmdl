@@ -2,6 +2,53 @@ table Sales
 	lineageTag: e0bdcaf3-089c-4e34-a8fe-f783628f38e7
 	sourceLineageTag: [dbo].[Sales]
 
+	measure 'Total Transactions' = COUNT(Sales[transaction_id])
+		formatString: 0
+		lineageTag: e5f6cf66-6105-48c2-958e-b00a3c8df518
+
+		changedProperty = Name
+
+	measure 'Average Basket Value' = SUM(Sales[total_amount])/[Total Transactions]
+		lineageTag: 6e71b2ad-455b-41b0-a5d1-486d54550faa
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Unit Price' = SUM(Sales[total_amount])/[Total Transactions]
+		lineageTag: 7852cb14-baec-4866-b919-78d45a573db2
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Revenue' = SUM(Sales[total_amount])
+		lineageTag: 607f1ee8-fbc8-482c-9c0f-11609e94b732
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Units Sold' = SUM(Sales[quantity])
+		formatString: 0
+		lineageTag: c15d06f5-cc89-4107-ba1d-26d182888100
+
+		changedProperty = Name
+
+	measure 'Product Rank' =
+			
+			RANKX(
+			    ALL('Sales'[product_id]),      -- removes product filter
+			    [Total Revenue],                -- expression to rank by
+			    ,
+			    DESC,                         -- highest first
+			    DENSE                         -- 1,2,3 (no gaps)
+			)
+		formatString: 0
+		lineageTag: b7172e42-5d4b-4a66-8fce-c22c859d77c4
+
+		changedProperty = Name
+
 	column transaction_id
 		dataType: string
 		lineageTag: 8d2f0b05-ca28-40a3-9fd8-9a082ec602fe

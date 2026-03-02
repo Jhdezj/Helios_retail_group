@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "Stores__Raw_to_Bronze",
+    "description": "It creates the Stores table "
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "2b84c5fe-4078-b9df-4279-2f1fb964ecdc"
+  }
+}

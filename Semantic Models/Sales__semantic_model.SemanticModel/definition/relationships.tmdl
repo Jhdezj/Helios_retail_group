@@ -1,0 +1,14 @@
+relationship f0f98ceb-3121-79f6-9980-a348846617c4
+	fromColumn: Sales.date_key
+	toColumn: Dates.date_key
+
+relationship c82e55f0-9813-0f28-901a-0f0aabeb65ec
+	crossFilteringBehavior: bothDirections
+	fromColumn: Sales.product_id
+	toColumn: Products.id
+
+relationship 0c2a2d45-8ddd-0678-27c3-4f7d9e59b617
+	crossFilteringBehavior: bothDirections
+	fromColumn: Sales.store_id
+	toColumn: Stores.id
+

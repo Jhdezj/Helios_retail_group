@@ -8,7 +8,7 @@
         "type": "Daily",
         "startDateTime": "2026-03-02T00:00:00",
         "endDateTime": "2027-03-02T00:00:00",
-        "localTimeZoneId": "Mountain Standard Time",
+        "localTimeZoneId": "Central Standard Time (Mexico)",
         "times": [
           "07:00"
         ]

@@ -3,6 +3,10 @@
  ## Overview 
 This project demonstrates a complete ETL pipeline built on Microsoft Fabric, following the Medallion Architecture (Bronze → Silver → Gold) and integrated with a Semantic Model for analytics consumption in Power BI. The solution processes daily sales data, transforms it into analytics-ready tables, and powers business insights through an interactive dashboard. The pipeline  is schedule to tuns automatically every day. 
 
+<img width="1537" height="758" alt="image" src="https://github.com/user-attachments/assets/a0c39586-309c-4293-954f-8b3a70b54248" />
+
+
+
 ## Business Scenario
 
 Retail organizations need clean, structured, and analytics-ready data to track: sales performance, product trends, store efficiency, and time-based KPIs. This project simulates a retail analytics solution that transforms transactional data into a star-schema-ready model, optimized for reporting and business intelligence.
@@ -23,6 +27,8 @@ The process run trhough a pipeline built with Microsoft Fabric Pipelines that is
 
 ## Power Bi Dashboard
 The KPIs implemented are sales by category, sales by store, average transaction value, sales by weekday vs weekend, year-over-year growth, and monthly sales trend.
+<img width="1391" height="738" alt="image" src="https://github.com/user-attachments/assets/ac68ae1b-870b-4db3-a714-0782d8f878af" />
+
 
 ## How to re-integrate this project into fabric
 - Create a Fabric Workspace
@@ -31,7 +37,7 @@ The KPIs implemented are sales by category, sales by store, average transaction 
 - Rebuild the pipeline
 - Publish the Power BI Dashboard
 
-## Future improvementes
+## Future improvements
 - Data quality monitoring layer
 - Row-Level Security(RLS)
 - Real-time streaming ingestion

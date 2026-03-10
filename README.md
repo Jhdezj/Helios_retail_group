@@ -1,5 +1,5 @@
 # Helios retail group
- Sales ETL Pipeline with Medallion Architecture on Fabric
+ Sales ETL Pipeline orchestration with Medallion Architecture on Fabric
  ## Overview 
 This project demonstrates a complete ETL pipeline built on Microsoft Fabric, following the Medallion Architecture (Bronze → Silver → Gold) and integrated with a Semantic Model for analytics consumption in Power BI. The solution processes daily sales data, transforms it into analytics-ready tables, and powers business insights through an interactive dashboard. The pipeline  is schedule to tuns automatically every day. 
 
